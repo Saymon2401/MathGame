@@ -48,7 +48,7 @@
             android:padding="5dp"/>
         <EditText
             android:id="@+id/myResult"
-            android:inputType="numberSigned|numberDecimal"
+            android:inputType="numberDecimal|numberSigned"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:width="50dp"

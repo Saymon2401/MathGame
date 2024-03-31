@@ -10,8 +10,8 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    lateinit var random: Random
-    var result:Int? = null
+    private lateinit var random: Random
+    private var result:Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,15 +25,21 @@ class MainActivity : AppCompatActivity() {
         setElements()
         next.setOnClickListener {
             val myRes = myResult.text.toString()
+            if (myRes.isEmpty()){
+                Toast.makeText(this, "Please write answer", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val userAnswer = myRes.toDoubleOrNull()
-            if (userAnswer != null && result != null && abs(userAnswer - result!!) < 0.01) {
-                Toast.makeText(this, "True", Toast.LENGTH_SHORT).show()
-                count++
-            }else if (userAnswer == null){
-                Toast.makeText(this, "Please write again", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "False", Toast.LENGTH_SHORT).show()
-                uncount++
+            if (userAnswer != null && result != null) {
+                val epsil = 0.1
+                val dif = abs(userAnswer - result!!)
+                if (dif <= epsil) {
+                    Toast.makeText(this, "True", Toast.LENGTH_SHORT).show()
+                    count++
+                } else {
+                    Toast.makeText(this, "False", Toast.LENGTH_SHORT).show()
+                    uncount++
+                }
             }
             score.text = count.toString()
             score2.text = uncount.toString()
@@ -43,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
     private fun setElements() {
         var num1 = findViewById<TextView>(R.id.number01)
         var num2 = findViewById<TextView>(R.id.number02)
@@ -56,19 +61,24 @@ class MainActivity : AppCompatActivity() {
         when(n) {
             0 -> {
                 elem.text = "+"
-                result = son1+son2
+                result = (son1+son2).toDouble()
+
             }
             1 -> {
                 elem.text = "-"
-                result = son1-son2
+                result = (son1-son2).toDouble()
             }
             2 -> {
                 elem.text = "*"
-                result = son1*son2
+                result = (son1*son2).toDouble()
             }
             3 -> {
                 elem.text = "/"
-                result = if (son2 != 0) son1/son2 else 0
+                if (son2 != 0) {
+                    result = son1.toDouble() / son2
+                } else {
+                    result = 0.0
+                }
             }
         }
     }
